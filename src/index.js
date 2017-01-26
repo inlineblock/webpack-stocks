@@ -10,8 +10,8 @@ const buildingImage = path.join(__dirname, '../images', 'webpack-building.png');
 
 export default class WebpackStocksPlugin {
 
-  constructor (options) {
-    this.options = options || {};
+  constructor (options = {}) {
+    this.options = options;
     this.symbols = options.symbols;
     if (!this.symbols) {
       this.readTickers();
