@@ -1,6 +1,6 @@
 {
   "name": "webpack-stocks",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Webpack notifier to alert you of stock prices while it builds",
   "main": "lib/index.js",
   "scripts": {
