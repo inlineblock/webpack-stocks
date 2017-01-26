@@ -12,7 +12,10 @@ export default class WebpackStocksPlugin {
 
   constructor (options) {
     this.options = options || {};
-    this.readTickers();
+    this.symbols = options.symbols;
+    if (!this.symbols) {
+      this.readTickers();
+    }
   }
 
   apply (compiler) {
