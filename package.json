@@ -4,6 +4,8 @@
   "description": "Webpack notifier to alert you of stock prices while it builds",
   "main": "lib/index.js",
   "scripts": {
+    "prepublish": "npm run build",
+    "clean": "rm -rf lib/",
     "build": "babel src/ -d lib",
     "watch": "babel src/ -d lib -w"
   },
