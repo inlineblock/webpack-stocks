@@ -22,10 +22,21 @@ export default class WebpackStocksPlugin {
     compiler.plugin('compile', this.onCompile);
     compiler.plugin('done', this.onDone);
     const options = compiler.options || {};
-    this.name = options.name || options.entry;
+    this.name = this.getName(options);
     if (typeof this.name !== 'string') {
       this.name = this.name[this.name.length - 1];
     }
+  }
+
+  getName (options) {
+    if (options.name) {
+      return options.name;
+    } else if (typeof options.entry === 'string') {
+      return options.entry;
+    } else if (options.entry) {
+      return Object.keys(options.entry).join(', ');
+    }
+    return 'Build';
   }
 
   onError = (error) => {
@@ -66,17 +77,20 @@ export default class WebpackStocksPlugin {
     } else if (!this.hasNotified) {
       this.hasNotified = true;
       this.notify({
-        title: 'Webpack Stocks error',
-        message: `No stocks symbols found in ~/.stocksrc.
-          Add symbols, new line separated, restart webpack.`,
-        icon: errorImage,
+        title: 'Webpack Stocks',
+        message: `No stocks symbols found in ~/.stocksrc.\nAdd symbols, new line separated, restart webpack.`,
+        icon: stocksImage,
       });
     }
   }
 
   readTickers () {
-    const file = fs.readFileSync(path.join(process.env.HOME, '.stocksrc'));
-    this.symbols = file.toString('ascii').split('\n').filter(s => !!s).map(s => s.toUpperCase());
+    try {
+      const file = fs.readFileSync(path.join(process.env.HOME, '.stocksrc'));
+      this.symbols = file.toString('ascii').split('\n').filter(s => !!s).map(s => s.toUpperCase());
+    } catch(e) {
+      this.symbols = [];
+    }
   }
 
   fetchPrices () {
